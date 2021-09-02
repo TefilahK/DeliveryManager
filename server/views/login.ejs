@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('partials/head', {title: title}) %>
+    <!--style>
+        form {
+            border: 3px solid #f1f1f1;
+        }
+
+        /* Full-width inputs */
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        /* Set a style for all buttons */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Add padding to containers */
+        .container {
+            padding: 16px;
+        }
+    </style-->
+    <style>
+        .Absolute-Center {
+            margin: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
+
+        .Absolute-Center.is-Responsive {
+            width: 50%;
+            height: 50%;
+            min-width: 200px;
+            max-width: 400px;
+            padding: 40px;
+        }
+    </style>
+    <script src="/javaScript/node-rsa.js">
+   
+   
+          const key = new NodeRSA({b: 512});
+ 
+ const text = 'Hello RSA!';
+ const encrypted = key.encrypt(text, 'base64');
+ console.log('encrypted: ', encrypted);
+ const decrypted = key.decrypt(encrypted, 'utf8');
+ console.log('decrypted: ', decrypted);
+    </script>
+    <script>
+  
+        function bad() {
+            <% if (problem !== undefined) { %>alert("<%- problem %>") <% } %>
+        }
+      
+        async function Login(){
+            let formData = new FormData();
+            formData.append("username",$('#user').val());
+            // let publicKey=await getPublicKey();
+            // encryptedPassword=encrypt(publicKey,$('#password').val());
+            let u=$('#user').val();
+            let encryptedPassword= $('#password').val();
+            // formData.append("password",encryptedPassword); 
+            // var request = new XMLHttpRequest();
+            // request.open("POST", '/login/');
+            // request.send(formData);  
+            // request.onloadend=function(){} 
+
+          let res=await  fetch("/login/", {
+  method: 'POST',
+  body: JSON.stringify({ username:u ,password:encryptedPassword }), // convert Js object to a string
+  headers: new Headers({ "Content-Type": "application/json" }) // add headers
+});
+ $('html').html(await res.text());
+        }
+        async function getPublicKey(){
+            let res=await fetch('keys/getPublicKey');
+            let getPublicKey=await res.json();
+            console.log(getPublicKey);
+            
+        }
+
+    </script>
+</head>
+<body onload='bad()'>
+<%- include('partials/header', {header: 'Login'}) %>
+<div class="container">
+    <div class="row">
+        <div class="Absolute-Center is-Responsive">
+            <div class="col-sm-12 col-md-10 col-md-offset-1">
+                <form method="POST" id="loginForm">
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input class="form-control" type="text" name='user' id='user' placeholder="Enter Username" required/>
+                    </div>
+                    <div class="form-group input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input class="form-control" type="password" name='password' id='password' placeholder="Enter Password"
+                               required/>
+                    </div>
+                    <div class="form-group">
+                        <button onclick="Login()" type="button" class="btn btn-def btn-block">Login</button>
+                    </div>
+                    <div class="form-group">
+                        <a href="forgetPassword/"  class="btn btn-def btn-block"><span class="fa fa-lock"></span> Forgot Password</a>
+                    </div>
+                    <div class="form-group">
+                        <a href="/aouth/google" class="btn btn-danger btn-block"><span class="fa fa-google"></span> LogIn with Google</a>
+                    </div>
+                
+                </form>
+               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <p><a href='/signin/'>signin </a></p>
+
+    
+   
+</body>
+</html>
